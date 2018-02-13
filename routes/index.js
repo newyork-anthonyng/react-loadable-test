@@ -6,14 +6,17 @@ import App from "../src/App";
 import Loadable from "react-loadable";
 import { getBundles } from "react-loadable/webpack";
 import stats from "../dist/react-loadable.json";
+import { StaticRouter } from "react-router-dom";
 
 router.get("*", (req, res) => {
   let modules = [];
 
   const html = ReactDOMServer.renderToString(
-    <Loadable.Capture report={moduleName => modules.push(moduleName)}>
-      <App />
-    </Loadable.Capture>
+    <StaticRouter location={req.url} context={{}}>
+      <Loadable.Capture report={moduleName => modules.push(moduleName)}>
+        <App />
+      </Loadable.Capture>
+    </StaticRouter>
   );
 
   let bundles = getBundles(stats, modules);
